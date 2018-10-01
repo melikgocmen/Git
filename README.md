@@ -1,11 +1,6 @@
 # Turnout Safety Module (TSM)
 
-<<<<<<< HEAD
 The repository contains the specification and implementation of the Turnout Safety Module (TSM) component of the Railway Interlocking System (RIS).
-=======
-This repository will be updated for future phases of the assignment.
-Please always update your repository at the beginning of each phase.
->>>>>>> eea2f91feae80c06a6e73cec795eb9c03b2885a3
 
 ## Overview
 

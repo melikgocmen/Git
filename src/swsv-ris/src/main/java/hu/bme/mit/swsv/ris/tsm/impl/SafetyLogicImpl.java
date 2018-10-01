@@ -164,7 +164,44 @@ public final class SafetyLogicImpl implements SafetyLogic {
 	 */
 	private SideTriple<SectionControl> makeDistributedDecision() {
 		// TODO Implement the distributed decision logic with TDD.
-		return SideTriple.of(ENABLED, ENABLED, ENABLED);
+		SectionControl facingDecision = ENABLED;
+		SectionControl straightDecision = ENABLED;
+		SectionControl divergentDecision = ENABLED;
+
+		if(sectionOccupancies.getFacing() == OCCUPIED) {
+			if(neighborStatuses == DENIED) {
+				facingDecision = DISABLED;
+				//[REQ-TSM-02-18] -1
+			} else if(turnoutDirection == STRAIGHT || turnoutDirection == DIVERGENT ){
+				if( neighborStatuses.get(STRAIGHT) == DENIED || neighborStatuses.get(DIVERGENT) == DENIED ){
+					facingDecision= DISABLED;
+				}
+			}//[REQ-TSM-02-18] -2
+		}
+
+		if(sectionOccupancies.getStraight() == OCCUPIED) {
+			if(neighborStatuses == DENIED) {
+				straightDecision = DISABLED;
+				//[REQ-TSM-02-18] -3
+			} else if(turnoutDirection == STRAIGHT || turnoutDirection == DIVERGENT ){
+				if( neighborStatuses.get(FACING) == DENIED){
+					straightDecision = DISABLED;
+				}
+			}//[REQ-TSM-02-18] -4
+		}
+
+		if(sectionOccupancies.getDivergent() == OCCUPIED) {
+			if(neighborStatuses == DENIED) {
+				divergentDecision = DISABLED;
+				//[REQ-TSM-02-18] -3
+			} else if(turnoutDirection == STRAIGHT || turnoutDirection == DIVERGENT ){
+				if( neighborStatuses.get(FACING) == DENIED){
+					divergentDecision = DISABLED;
+				}
+			}//[REQ-TSM-02-18] -4
+		}
+
+		return SideTriple.of(facingDecision, straightDecision, divergentDecision);
 	}
 
 	/**
